@@ -1,61 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <script src="https://miro.com/app/static/sdk.1.1.js"></script>
-    <script>
-    console.log('loading...');
-    miro.onReady(() => {
-        console.log('ready');
-      miro.initialize({
-        
-        extensionPoints: {
-          bottomBar: {
-            title: 'Some title',
-            svgIcon: '<circle cx="12" cy="12" r="9" fill="none" fill-rule="evenodd" stroke="currentColor" stroke-width="2"/>',
-            onClick: () => {
-                const app_id = 3074457357820457132n;
-
-                let pi_tags = {};
-
-                function validateSticker ( item, index, arr)  {
-                    let pi = '';
-                    if (app_id in item.metadata) {
-                        pi = item.metadata[app_id].pi;
-                        if (pi != undefined) {
-                            if (!(pi in pi_tags)){
-                                pi_tags[pi] = [];
-                            }
-                            pi_tags[pi].push(item.id);
-                        }
-                    }
-                }
-
-                await miro.board.widgets.get({type: "sticker"}).then((theWidgets) => theWidgets.forEach( validateSticker) );
-
-                let miro_tags = await miro.board.tags.get();
-                console.log(miro_tags);
-
-                for (tag in miro_tags) {
-                    console.log(miro_tags[tag]);
-
-                    if (miro_tags[tag].title in pi_tags){
-                        await miro.board.tags.delete({id:miro_tags[tag].id});
-                    }
-                }
-
-                for (tag in pi_tags) {
-                    await miro.board.tags.create({title: tag, color: '#F24726',  widgetIds: pi_tags[tag]});
-                }
-
-
-
-
-              alert('Tags Updated')
-            }
-          }
-        }
-      })
-    })
-    </script>
-</head>
+    <script src="miro_update.js"></script>
+    <script src="main.js"></script>
+  </head>
 </html>
